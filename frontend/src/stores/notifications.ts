@@ -95,26 +95,22 @@ export const useNotificationStore = defineStore('notifications', () => {
       const host = window.location.host
       const wsUrl = `${wsProtocol}//${host}/api/ws/notifications?token=${encodeURIComponent(token)}`
 
-      console.log('[WS] 连接到:', wsUrl)
 
       const socket = new WebSocket(wsUrl)
       ws.value = socket
 
       socket.onopen = () => {
-        console.log('[WS] 连接成功')
         wsConnected.value = true
         wsReconnectAttempts = 0
       }
 
       socket.onclose = (event) => {
-        console.log('[WS] 连接关闭:', event.code, event.reason)
         wsConnected.value = false
         ws.value = null
 
         // 自动重连
         if (wsReconnectAttempts < maxReconnectAttempts) {
           const delay = Math.min(1000 * Math.pow(2, wsReconnectAttempts), 30000)
-          console.log(`[WS] ${delay}ms 后重连 (尝试 ${wsReconnectAttempts + 1}/${maxReconnectAttempts})`)
 
           wsReconnectTimer = setTimeout(() => {
             wsReconnectAttempts++
@@ -146,11 +142,9 @@ export const useNotificationStore = defineStore('notifications', () => {
 
   // 处理 WebSocket 消息
   function handleWebSocketMessage(message: any) {
-    console.log('[WS] 收到消息:', message)
 
     switch (message.type) {
       case 'connected':
-        console.log('[WS] 连接确认:', message.data)
         break
 
       case 'notification':
@@ -196,13 +190,11 @@ export const useNotificationStore = defineStore('notifications', () => {
 
   // 🔥 连接 WebSocket
   function connect() {
-    console.log('[Notifications] 开始连接...')
     connectWebSocket()
   }
 
   // 🔥 断开 WebSocket
   function disconnect() {
-    console.log('[Notifications] 断开连接...')
     disconnectWebSocket()
   }
 

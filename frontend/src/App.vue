@@ -5,11 +5,7 @@
 
     <!-- 主要内容区域 -->
     <router-view v-slot="{ Component, route }">
-      <transition
-        :name="(route?.meta?.transition as string) || 'fade'"
-        mode="out-in"
-        appear
-      >
+      <transition :name="(route?.meta?.transition as string) || 'fade'" mode="out-in" appear>
         <keep-alive :include="keepAliveComponents">
           <component :is="Component" :key="route?.fullPath || 'default'" />
         </keep-alive>
@@ -17,10 +13,7 @@
     </router-view>
 
     <!-- 配置向导 -->
-    <ConfigWizard
-      v-model="showConfigWizard"
-      @complete="handleWizardComplete"
-    />
+    <ConfigWizard v-model="showConfigWizard" @complete="handleWizardComplete" />
   </div>
 </template>
 
@@ -32,11 +25,7 @@ import axios from 'axios'
 import { configApi } from '@/api/config'
 
 // 需要缓存的组件
-const keepAliveComponents = computed(() => [
-  'Dashboard',
-  'StockScreening',
-  'AnalysisHistory'
-])
+const keepAliveComponents = computed(() => ['Dashboard', 'StockScreening', 'AnalysisHistory'])
 
 // 配置向导
 const showConfigWizard = ref(false)
@@ -71,8 +60,6 @@ const checkFirstTimeSetup = async () => {
 // 配置向导完成处理
 const handleWizardComplete = async (data: any) => {
   try {
-    console.log('配置向导数据:', data)
-
     // 1. 保存大模型配置
     if (data.llm?.provider && data.llm?.apiKey) {
       try {
@@ -81,7 +68,10 @@ const handleWizardComplete = async (data: any) => {
           deepseek: { name: 'DeepSeek', base_url: 'https://api.deepseek.com' },
           dashscope: { name: '通义千问', base_url: 'https://dashscope.aliyuncs.com/api/v1' },
           openai: { name: 'OpenAI', base_url: 'https://api.openai.com/v1' },
-          google: { name: 'Google Gemini', base_url: 'https://generativelanguage.googleapis.com/v1' }
+          google: {
+            name: 'Google Gemini',
+            base_url: 'https://generativelanguage.googleapis.com/v1'
+          }
         }
 
         const providerInfo = providerMap[data.llm.provider]
@@ -147,10 +137,6 @@ const handleWizardComplete = async (data: any) => {
     // 注意：数据库配置通常在 .env 文件中，这里只是记录用户的选择
     // 实际的数据库连接需要在后端 .env 文件中配置
     if (data.mongodb || data.redis) {
-      console.log('数据库配置（需要在 .env 文件中设置）:', {
-        mongodb: data.mongodb,
-        redis: data.redis
-      })
     }
 
     // 标记配置向导已完成
@@ -186,7 +172,7 @@ onMounted(() => {
   left: 0;
   right: 0;
   z-index: 9999;
-  background: linear-gradient(90deg, #409EFF 0%, #67C23A 100%);
+  background: linear-gradient(90deg, #409eff 0%, #67c23a 100%);
   height: 2px;
 }
 

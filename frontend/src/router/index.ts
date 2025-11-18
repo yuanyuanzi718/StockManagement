@@ -421,14 +421,6 @@ router.beforeEach(async (to, from, next) => {
     document.title = `${title} - TradingAgents-CN`
   }
 
-  console.log('🚦 路由守卫检查:', {
-    path: to.fullPath,
-    name: to.name,
-    requiresAuth: to.meta.requiresAuth,
-    isAuthenticated: authStore.isAuthenticated,
-    hasToken: !!authStore.token
-  })
-
   // 检查是否需要认证
   if (to.meta.requiresAuth && !authStore.isAuthenticated) {
     console.log('🔒 需要认证但用户未登录:', {

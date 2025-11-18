@@ -83,31 +83,24 @@ const initApp = async () => {
     const authStore = useAuthStore()
     const appStore = useAppStore()
 
-    console.log('🔄 初始化应用状态...')
-
     // 应用主题
     appStore.applyTheme()
-    console.log('🎨 主题已应用:', appStore.theme)
 
     // 设置网络状态监听
     window.addEventListener('online', () => {
-      console.log('🌐 网络已连接')
       appStore.setOnlineStatus(true)
       appStore.checkApiConnection()
     })
 
     window.addEventListener('offline', () => {
-      console.log('📱 网络已断开')
       appStore.setOnlineStatus(false)
       appStore.setApiConnected(false)
     })
 
     // 检查API连接状态
-    console.log('🔍 检查API连接状态...')
     const apiConnected = await appStore.checkApiConnection()
 
     if (apiConnected) {
-      console.log('✅ API连接正常，检查认证状态...')
       // 检查本地存储的认证信息（设置较短的超时时间）
       const checkPromise = authStore.checkAuthStatus()
       const timeoutPromise = new Promise((_, reject) => {
@@ -115,7 +108,6 @@ const initApp = async () => {
       })
 
       await Promise.race([checkPromise, timeoutPromise])
-      console.log('✅ 认证状态初始化完成')
 
       // 如果用户已登录，启动 token 自动刷新定时器
       if (authStore.isAuthenticated) {
@@ -133,7 +125,6 @@ const initApp = async () => {
   } finally {
     // 无论认证状态如何，都挂载应用
     app.mount('#app')
-    console.log('🚀 应用已挂载')
   }
 }
 
@@ -142,7 +133,4 @@ initApp()
 
 // 开发环境下的调试信息
 if (import.meta.env.DEV) {
-  console.log('🚀 TradingAgents-CN v1.0.0-preview 前端应用已启动')
-  console.log('📊 当前环境:', import.meta.env.MODE)
-  console.log('🔗 API地址:', import.meta.env.VITE_API_BASE_URL || '/api')
 }

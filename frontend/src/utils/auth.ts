@@ -91,7 +91,7 @@ export const isTokenValid = (token: string | null): boolean => {
   // 尝试解析 token payload
   try {
     const payload = JSON.parse(atob(parts[1]))
-    
+
     // 检查是否过期
     if (payload.exp) {
       const now = Math.floor(Date.now() / 1000)
@@ -188,7 +188,4 @@ export const setupTokenRefreshTimer = (): void => {
   setInterval(() => {
     autoRefreshToken()
   }, 60000)
-
-  console.log('✅ Token 自动刷新定时器已启动')
 }
-
