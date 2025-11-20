@@ -102,10 +102,10 @@ source venv/bin/activate
 ### 第4步：启动后端
 
 ```bash
-# 方式1：使用 main.py（推荐）
+# 方式1：使用 main.py
 python main.py
 
-# 方式2：使用模块方式
+# 方式2：使用模块方式（推荐）
 python -m app
 
 # 方式3：直接使用 uvicorn
@@ -142,18 +142,11 @@ cd /Users/adam/Documents/TradingAgents-CN/frontend
 # 如果是第一次运行，需要先安装依赖
 npm install
 
-# 或使用 yarn
-yarn install
-```
-
 ### 第4步：启动前端开发服务器
 
 ```bash
 # 使用 npm
 npm run dev
-
-# 或使用 yarn
-yarn dev
 ```
 
 **看到以下输出表示成功：**

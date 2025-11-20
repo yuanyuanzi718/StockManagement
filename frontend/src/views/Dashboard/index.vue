@@ -23,7 +23,6 @@
       </div>
     </div>
 
-
     <!-- 学习中心推荐卡片 -->
     <el-card class="learning-highlight-card">
       <div class="learning-highlight">
@@ -32,7 +31,9 @@
         </div>
         <div class="learning-content">
           <h2>📚 AI股票分析学习中心</h2>
-          <p>从零开始学习AI、大语言模型和智能股票分析。了解多智能体系统如何协作分析股票，掌握提示词工程技巧，选择合适的大模型，理解AI的能力与局限性。</p>
+          <p>
+            从零开始学习AI、大语言模型和智能股票分析。了解多智能体系统如何协作分析股票，掌握提示词工程技巧，选择合适的大模型，理解AI的能力与局限性。
+          </p>
           <div class="learning-features">
             <span class="feature-tag">🤖 AI基础知识</span>
             <span class="feature-tag">✍️ 提示词工程</span>
@@ -104,7 +105,7 @@
         </el-card>
 
         <!-- 最近分析 -->
-        <el-card class="recent-analyses-card" header="最近分析" style="margin-top: 24px;">
+        <el-card class="recent-analyses-card" header="最近分析" style="margin-top: 24px">
           <el-table :data="recentAnalyses" style="width: 100%">
             <el-table-column prop="stock_code" label="股票代码" width="120" />
             <el-table-column prop="stock_name" label="股票名称" width="150" />
@@ -122,9 +123,7 @@
             </el-table-column>
             <el-table-column label="操作">
               <template #default="{ row }">
-                <el-button type="text" size="small" @click="viewAnalysis(row)">
-                  查看
-                </el-button>
+                <el-button type="text" size="small" @click="viewAnalysis(row)"> 查看 </el-button>
                 <el-button
                   v-if="row.status === 'completed'"
                   type="text"
@@ -145,7 +144,7 @@
         </el-card>
 
         <!-- 市场快讯 -->
-        <el-card class="market-news-card" style="margin-top: 24px;">
+        <!-- <el-card class="market-news-card" style="margin-top: 24px;">
           <template #header>
             <span>市场快讯</span>
           </template>
@@ -164,7 +163,7 @@
             <el-icon class="empty-icon"><InfoFilled /></el-icon>
             <p>暂无市场快讯</p>
           </div>
-        </el-card>
+        </el-card> -->
       </el-col>
 
       <!-- 右侧：自选股和快讯 -->
@@ -182,9 +181,7 @@
 
           <div v-if="favoriteStocks.length === 0" class="empty-favorites">
             <el-empty description="暂无自选股" :image-size="60">
-              <el-button type="primary" size="small" @click="goToFavorites">
-                添加自选股
-              </el-button>
+              <el-button type="primary" size="small" @click="goToFavorites"> 添加自选股 </el-button>
             </el-empty>
           </div>
 
@@ -201,11 +198,9 @@
               </div>
               <div class="stock-price">
                 <div class="current-price">¥{{ stock.current_price }}</div>
-                <div
-                  class="change-percent"
-                  :class="getPriceChangeClass(stock.change_percent)"
-                >
-                  {{ stock.change_percent > 0 ? '+' : '' }}{{ Number(stock.change_percent).toFixed(2) }}%
+                <div class="change-percent" :class="getPriceChangeClass(stock.change_percent)">
+                  {{ stock.change_percent > 0 ? '+' : ''
+                  }}{{ Number(stock.change_percent).toFixed(2) }}%
                 </div>
               </div>
             </div>
@@ -219,7 +214,7 @@
         </el-card>
 
         <!-- 模拟交易账户 -->
-        <el-card class="paper-trading-card" style="margin-top: 24px;">
+        <el-card class="paper-trading-card" style="margin-top: 24px">
           <template #header>
             <div class="card-header">
               <span>模拟交易账户</span>
@@ -235,15 +230,23 @@
               <div class="account-section-title">🇨🇳 A股账户</div>
               <div class="account-item">
                 <div class="account-label">现金</div>
-                <div class="account-value">¥{{ formatMoney(paperAccount.cash?.CNY || paperAccount.cash) }}</div>
+                <div class="account-value">
+                  ¥{{ formatMoney(paperAccount.cash?.CNY || paperAccount.cash) }}
+                </div>
               </div>
               <div class="account-item">
                 <div class="account-label">持仓市值</div>
-                <div class="account-value">¥{{ formatMoney(paperAccount.positions_value?.CNY || paperAccount.positions_value) }}</div>
+                <div class="account-value">
+                  ¥{{
+                    formatMoney(paperAccount.positions_value?.CNY || paperAccount.positions_value)
+                  }}
+                </div>
               </div>
               <div class="account-item">
                 <div class="account-label">总资产</div>
-                <div class="account-value primary">¥{{ formatMoney(paperAccount.equity?.CNY || paperAccount.equity) }}</div>
+                <div class="account-value primary">
+                  ¥{{ formatMoney(paperAccount.equity?.CNY || paperAccount.equity) }}
+                </div>
               </div>
             </div>
 
@@ -256,11 +259,15 @@
               </div>
               <div class="account-item">
                 <div class="account-label">持仓市值</div>
-                <div class="account-value">HK${{ formatMoney(paperAccount.positions_value?.HKD || 0) }}</div>
+                <div class="account-value">
+                  HK${{ formatMoney(paperAccount.positions_value?.HKD || 0) }}
+                </div>
               </div>
               <div class="account-item">
                 <div class="account-label">总资产</div>
-                <div class="account-value primary">HK${{ formatMoney(paperAccount.equity?.HKD || 0) }}</div>
+                <div class="account-value primary">
+                  HK${{ formatMoney(paperAccount.equity?.HKD || 0) }}
+                </div>
               </div>
             </div>
 
@@ -273,11 +280,15 @@
               </div>
               <div class="account-item">
                 <div class="account-label">持仓市值</div>
-                <div class="account-value">${{ formatMoney(paperAccount.positions_value?.USD || 0) }}</div>
+                <div class="account-value">
+                  ${{ formatMoney(paperAccount.positions_value?.USD || 0) }}
+                </div>
               </div>
               <div class="account-item">
                 <div class="account-label">总资产</div>
-                <div class="account-value primary">${{ formatMoney(paperAccount.equity?.USD || 0) }}</div>
+                <div class="account-value primary">
+                  ${{ formatMoney(paperAccount.equity?.USD || 0) }}
+                </div>
               </div>
             </div>
           </div>
@@ -292,7 +303,7 @@
         </el-card>
 
         <!-- 多数据源同步 -->
-        <MultiSourceSyncCard style="margin-top: 24px;" />
+        <MultiSourceSyncCard style="margin-top: 24px" />
       </el-col>
     </el-row>
   </div>
@@ -351,13 +362,11 @@ const recentAnalyses = ref<AnalysisTask[]>([])
 const favoriteStocks = ref<any[]>([])
 
 // 市场快讯数据
-const marketNews = ref<any[]>([])
+// const marketNews = ref<any[]>([])
 const syncingNews = ref(false)
 
 // 模拟交易账户数据
 const paperAccount = ref<PaperAccountSummary | null>(null)
-
-
 
 // 方法
 const quickAnalysis = () => {
@@ -403,7 +412,7 @@ const downloadReport = async (analysis: AnalysisTask) => {
     const reportId = analysis.task_id
     const res = await fetch(`/api/reports/${reportId}/download?format=markdown`, {
       headers: {
-        'Authorization': `Bearer ${authStore.token}`
+        Authorization: `Bearer ${authStore.token}`
       }
     })
     if (!res.ok) {
@@ -419,7 +428,7 @@ const downloadReport = async (analysis: AnalysisTask) => {
     const code = (analysis as any).stock_code || (analysis as any).stock_symbol || 'stock'
     const dateStr = (analysis as any).analysis_date || (analysis as any).start_time || ''
     // 🔥 统一文件名格式：{code}_分析报告_{date}.md
-    a.download = `${code}_分析报告_${String(dateStr).slice(0,10)}.md`
+    a.download = `${code}_分析报告_${String(dateStr).slice(0, 10)}.md`
     document.body.appendChild(a)
     a.click()
     window.URL.revokeObjectURL(url)
@@ -439,7 +448,9 @@ const openNewsUrl = (url?: string) => {
   }
 }
 
-const getStatusType = (status: string | AnalysisStatus): 'success' | 'info' | 'warning' | 'danger' => {
+const getStatusType = (
+  status: string | AnalysisStatus
+): 'success' | 'info' | 'warning' | 'danger' => {
   const statusMap: Record<string, 'success' | 'info' | 'warning' | 'danger'> = {
     pending: 'info',
     processing: 'warning',
@@ -517,39 +528,41 @@ const loadRecentAnalyses = async () => {
 
     recentAnalyses.value = tasks
     userStats.value.totalAnalyses = body.total ?? tasks.length
-    userStats.value.successfulAnalyses = tasks.filter((item: any) => item.status === 'completed').length
+    userStats.value.successfulAnalyses = tasks.filter(
+      (item: any) => item.status === 'completed'
+    ).length
   } catch (error) {
     console.error('加载最近分析失败:', error)
     recentAnalyses.value = []
   }
 }
 
-const loadMarketNews = async () => {
-  try {
-    // 先尝试获取最近 24 小时的新闻
-    let response = await newsApi.getLatestNews(undefined, 10, 24)
+// const loadMarketNews = async () => {
+//   try {
+//     // 先尝试获取最近 24 小时的新闻
+//     let response = await newsApi.getLatestNews(undefined, 10, 24)
 
-    // 如果最近 24 小时没有新闻，则获取最新的 10 条（不限时间）
-    if (response.success && response.data && response.data.news.length === 0) {
-      console.log('最近 24 小时没有新闻，获取最新的 10 条新闻（不限时间）')
-      response = await newsApi.getLatestNews(undefined, 10, 24 * 365) // 回溯 1 年
-    }
+//     // 如果最近 24 小时没有新闻，则获取最新的 10 条（不限时间）
+//     if (response.success && response.data && response.data.news.length === 0) {
+//       console.log('最近 24 小时没有新闻，获取最新的 10 条新闻（不限时间）')
+//       response = await newsApi.getLatestNews(undefined, 10, 24 * 365) // 回溯 1 年
+//     }
 
-    if (response.success && response.data) {
-      marketNews.value = response.data.news.map((item: any) => ({
-        id: item.id || item.title,
-        title: item.title,
-        time: item.publish_time,
-        url: item.url,
-        source: item.source
-      }))
-    }
-  } catch (error) {
-    console.error('加载市场快讯失败:', error)
-    // 如果加载失败，显示提示信息
-    marketNews.value = []
-  }
-}
+//     if (response.success && response.data) {
+//       marketNews.value = response.data.news.map((item: any) => ({
+//         id: item.id || item.title,
+//         title: item.title,
+//         time: item.publish_time,
+//         url: item.url,
+//         source: item.source
+//       }))
+//     }
+//   } catch (error) {
+//     console.error('加载市场快讯失败:', error)
+//     // 如果加载失败，显示提示信息
+//     marketNews.value = []
+//   }
+// }
 
 // 加载模拟交易账户信息
 const loadPaperAccount = async () => {
@@ -615,7 +628,7 @@ onMounted(async () => {
   // 加载最近分析
   await loadRecentAnalyses()
   // 加载市场快讯
-  await loadMarketNews()
+  // await loadMarketNews()
   // 加载模拟交易账户
   await loadPaperAccount()
 })

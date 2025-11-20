@@ -116,6 +116,8 @@ const handleMainClick = () => {
 watch(width, (newWidth) => {
   if (newWidth < 768 && !appStore.sidebarCollapsed) {
     appStore.setSidebarCollapsed(true)
+  }else if(newWidth >= 768 && appStore.sidebarCollapsed){
+    appStore.setSidebarCollapsed(false)
   }
 })
 
