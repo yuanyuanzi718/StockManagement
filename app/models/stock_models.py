@@ -2,13 +2,13 @@
 股票数据模型 - 基于现有集合扩展
 采用方案B: 在现有集合基础上扩展字段，保持向后兼容
 """
-from datetime import datetime, date
-from typing import Optional, Dict, Any, List, Literal
-from pydantic import BaseModel, Field
-from bson import ObjectId
+from datetime import datetime, date # 日期时间模块
+from typing import Optional, Dict, Any, List, Literal # 类型提示模块
+from pydantic import BaseModel, Field # Pydantic模型
+from bson import ObjectId # MongoDB ObjectId
 
 
-def to_str_id(v: Any) -> str:
+def to_str_id(v: Any) -> str: # ObjectId转字符串工具函数
     """ObjectId转字符串工具函数"""
     try:
         if isinstance(v, ObjectId):

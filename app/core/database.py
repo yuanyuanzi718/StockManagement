@@ -3,28 +3,28 @@
 增强版本，支持连接池、健康检查和错误恢复
 """
 
-import logging
-import asyncio
-from typing import Optional
-from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorDatabase
-from pymongo import MongoClient
-from pymongo.database import Database
-from redis.asyncio import Redis, ConnectionPool
-from pymongo.errors import ServerSelectionTimeoutError, ConnectionFailure
-from redis.exceptions import ConnectionError as RedisConnectionError
-from .config import settings
+import logging # 日志模块
+import asyncio # 异步IO模块
+from typing import Optional # 类型提示模块
+from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorDatabase # 异步MongoDB客户端
+from pymongo import MongoClient # MongoDB客户端
+from pymongo.database import Database # MongoDB数据库
+from redis.asyncio import Redis, ConnectionPool # 异步Redis客户端
+from pymongo.errors import ServerSelectionTimeoutError, ConnectionFailure # MongoDB错误
+from redis.exceptions import ConnectionError as RedisConnectionError # Redis错误
+from .config import settings # 配置模块
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(__name__) # 日志记录器
 
 # 全局连接实例
-mongo_client: Optional[AsyncIOMotorClient] = None
-mongo_db: Optional[AsyncIOMotorDatabase] = None
-redis_client: Optional[Redis] = None
-redis_pool: Optional[ConnectionPool] = None
+mongo_client: Optional[AsyncIOMotorClient] = None # 异步MongoDB客户端
+mongo_db: Optional[AsyncIOMotorDatabase] = None # 异步MongoDB数据库
+redis_client: Optional[Redis] = None # 异步Redis客户端
+redis_pool: Optional[ConnectionPool] = None # 异步Redis连接池
 
 # 同步 MongoDB 连接（用于非异步上下文）
-_sync_mongo_client: Optional[MongoClient] = None
-_sync_mongo_db: Optional[Database] = None
+_sync_mongo_client: Optional[MongoClient] = None # 同步MongoDB客户端
+_sync_mongo_db: Optional[Database] = None # 同步MongoDB数据库
 
 
 class DatabaseManager:

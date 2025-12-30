@@ -2,15 +2,15 @@
 AKShare统一数据提供器
 基于AKShare SDK的统一数据同步方案，提供标准化的数据接口
 """
-import asyncio
-import logging
-from datetime import datetime, timedelta, timezone
-from typing import Dict, Any, List, Optional, Union
-import pandas as pd
+import asyncio # 异步IO模块
+import logging # 日志模块
+from datetime import datetime, timedelta, timezone # 日期时间模块
+from typing import Dict, Any, List, Optional, Union # 类型提示模块
+import pandas as pd # 数据处理模块
 
-from ..base_provider import BaseStockDataProvider
+from ..base_provider import BaseStockDataProvider # 基础股票数据提供器
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(__name__) # 日志记录器
 
 
 class AKShareProvider(BaseStockDataProvider):
@@ -27,11 +27,11 @@ class AKShareProvider(BaseStockDataProvider):
     
     def __init__(self):
         super().__init__("AKShare")
-        self.ak = None
-        self.connected = False
+        self.ak = None # AKShare客户端
+        self.connected = False # 连接状态
         self._stock_list_cache = None  # 缓存股票列表，避免重复获取
         self._cache_time = None  # 缓存时间
-        self._initialize_akshare()
+        self._initialize_akshare() # 初始化AKShare
     
     def _initialize_akshare(self):
         """初始化AKShare连接"""

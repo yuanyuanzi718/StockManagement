@@ -14,32 +14,32 @@ For commercial licensing, please contact: hsliup@163.com
 """
 
 from fastapi import FastAPI, Request
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.middleware.trustedhost import TrustedHostMiddleware
-from fastapi.responses import JSONResponse
-import uvicorn
-import logging
-import time
-from datetime import datetime
-from contextlib import asynccontextmanager
-import asyncio
-from pathlib import Path
+from fastapi.middleware.cors import CORSMiddleware # 跨域请求中间件
+from fastapi.middleware.trustedhost import TrustedHostMiddleware # 信任主机中间件
+from fastapi.responses import JSONResponse # 响应中间件
+import uvicorn # 异步服务器框架
+import logging # 日志模块
+import time # 时间模块
+from datetime import datetime # 日期时间模块
+from contextlib import asynccontextmanager # 异步上下文管理器
+import asyncio # 异步IO模块
+from pathlib import Path # 路径模块
 
-from app.core.config import settings
-from app.core.database import init_db, close_db
-from app.core.logging_config import setup_logging
-from app.routers import auth_db as auth, analysis, screening, queue, sse, health, favorites, config, reports, database, operation_logs, tags, tushare_init, akshare_init, baostock_init, historical_data, multi_period_sync, financial_data, news_data, social_media, internal_messages, usage_statistics, model_capabilities, cache, logs
-from app.routers import sync as sync_router, multi_source_sync
-from app.routers import stocks as stocks_router
-from app.routers import stock_data as stock_data_router
-from app.routers import stock_sync as stock_sync_router
-from app.routers import multi_market_stocks as multi_market_stocks_router
-from app.routers import notifications as notifications_router
-from app.routers import websocket_notifications as websocket_notifications_router
-from app.routers import scheduler as scheduler_router
+from app.core.config import settings # 配置模块
+from app.core.database import init_db, close_db # 数据库模块
+from app.core.logging_config import setup_logging # 日志配置模块
+from app.routers import auth_db as auth, analysis, screening, queue, sse, health, favorites, config, reports, database, operation_logs, tags, tushare_init, akshare_init, baostock_init, historical_data, multi_period_sync, financial_data, news_data, social_media, internal_messages, usage_statistics, model_capabilities, cache, logs # 路由模块
+from app.routers import sync as sync_router, multi_source_sync # 同步模块
+from app.routers import stocks as stocks_router # 股票模块
+from app.routers import stock_data as stock_data_router # 股票数据模块
+from app.routers import stock_sync as stock_sync_router 
+from app.routers import multi_market_stocks as multi_market_stocks_router # 多市场股票模块
+from app.routers import notifications as notifications_router # 通知模块
+from app.routers import websocket_notifications as websocket_notifications_router # WebSocket通知模块
+from app.routers import scheduler as scheduler_router # 调度模块
 from app.services.basics_sync_service import get_basics_sync_service
-from app.services.multi_source_basics_sync_service import MultiSourceBasicsSyncService
-from app.services.scheduler_service import set_scheduler_instance
+from app.services.multi_source_basics_sync_service import MultiSourceBasicsSyncService # 多源基础同步服务模块
+from app.services.scheduler_service import set_scheduler_instance # 调度服务模块
 from app.worker.tushare_sync_service import (
     run_tushare_basic_info_sync,
     run_tushare_quotes_sync,
@@ -238,23 +238,24 @@ async def lifespan(app: FastAPI):
         logger.warning("⚠️  TradingAgents 将使用 .env 文件中的配置")
 
     # Apply dynamic settings (log_level, enable_monitoring) from ConfigProvider
+    # 应用动态设置（日志级别，启用监控）从 ConfigProvider
     try:
         from app.services.config_provider import provider as config_provider  # local import to avoid early DB init issues
         eff = await config_provider.get_effective_system_settings()
         desired_level = str(eff.get("log_level", "INFO")).upper()
-        setup_logging(log_level=desired_level)
+        setup_logging(log_level=desired_level) # 设置日志级别
         for name in ("webapi", "worker", "uvicorn", "fastapi"):
-            logging.getLogger(name).setLevel(desired_level)
+            logging.getLogger(name).setLevel(desired_level) # 设置日志级别
         try:
             from app.middleware.operation_log_middleware import set_operation_log_enabled
-            set_operation_log_enabled(bool(eff.get("enable_monitoring", True)))
+            set_operation_log_enabled(bool(eff.get("enable_monitoring", True))) # 设置操作日志启用
         except Exception:
             pass
     except Exception as e:
-        logging.getLogger("webapi").warning(f"Failed to apply dynamic settings: {e}")
+        logging.getLogger("webapi").warning(f"Failed to apply dynamic settings: {e}") # 设置操作日志启用失败
 
     # 显示配置摘要
-    await _print_config_summary(logger)
+    await _print_config_summary(logger) # 显示配置摘要
 
     logger.info("TradingAgents FastAPI backend started")
 
@@ -602,28 +603,28 @@ async def lifespan(app: FastAPI):
 
 # 创建FastAPI应用
 app = FastAPI(
-    title="TradingAgents-CN API",
-    description="股票分析与批量队列系统 API",
-    version=get_version(),
-    docs_url="/docs" if settings.DEBUG else None,
-    redoc_url="/redoc" if settings.DEBUG else None,
-    lifespan=lifespan
+    title="TradingAgents-CN API", # 标题
+    description="股票分析与批量队列系统 API", # 描述
+    version=get_version(), # 版本
+    docs_url="/docs" if settings.DEBUG else None, # 文档URL，如果非调试模式则不显示
+    redoc_url="/redoc" if settings.DEBUG else None, # Redoc URL，如果非调试模式则不显示
+    lifespan=lifespan # 生命周期，用于启动和关闭应用
 )
 
 # 安全中间件
-if not settings.DEBUG:
+if not settings.DEBUG: # 如果非调试模式
     app.add_middleware(
-        TrustedHostMiddleware,
-        allowed_hosts=settings.ALLOWED_HOSTS
+        TrustedHostMiddleware, # 信任主机中间件
+        allowed_hosts=settings.ALLOWED_HOSTS # 允许的主机列表
     )
 
 # CORS中间件
 app.add_middleware(
-    CORSMiddleware,
-    allow_origins=settings.ALLOWED_ORIGINS,
-    allow_credentials=True,
-    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allow_headers=["*"],
+    CORSMiddleware, # 跨域请求中间件
+    allow_origins=settings.ALLOWED_ORIGINS, # 允许的源列表
+    allow_credentials=True, # 允许凭证
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"], # 允许的方法
+    allow_headers=["*"], # 允许的头
 )
 
 
@@ -745,20 +746,20 @@ async def root():
 if __name__ == "__main__":
     uvicorn.run(
         "app.main:app",
-        host=settings.HOST,
-        port=settings.PORT,
-        reload=settings.DEBUG,
-        log_level="info",
-        reload_dirs=["app"] if settings.DEBUG else None,
+        host=settings.HOST, # 主机
+        port=settings.PORT, # 端口
+        reload=settings.DEBUG, # 重新加载
+        log_level="info", # 日志级别
+        reload_dirs=["app"] if settings.DEBUG else None, # 重新加载目录
         reload_excludes=[
-            "__pycache__",
-            "*.pyc",
-            "*.pyo",
-            "*.pyd",
-            ".git",
-            ".pytest_cache",
-            "*.log",
-            "*.tmp"
+            "__pycache__", # 缓存目录
+            "*.pyc", # 字节码文件
+            "*.pyo", # 优化字节码文件
+            "*.pyd", # 动态库文件
+            ".git", # git目录
+            ".pytest_cache", # pytest缓存目录
+            "*.log", # 日志文件
+            "*.tmp" # 临时文件
         ] if settings.DEBUG else None,
-        reload_includes=["*.py"] if settings.DEBUG else None
+        reload_includes=["*.py"] if settings.DEBUG else None # 重新加载包含的文件
     )

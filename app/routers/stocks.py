@@ -4,21 +4,21 @@
 - 所有端点均需鉴权 (Bearer Token)
 - 路径前缀在 main.py 中挂载为 /api，当前路由自身前缀为 /stocks
 """
-from typing import Optional, Dict, Any, List, Tuple
-from fastapi import APIRouter, Depends, HTTPException, status, Query
-import logging
-import re
+from typing import Optional, Dict, Any, List, Tuple # 类型提示模块
+from fastapi import APIRouter, Depends, HTTPException, status, Query # FastAPI模块  
+import logging # 日志模块
+import re # 正则表达式模块
 
-from app.routers.auth_db import get_current_user
-from app.core.database import get_mongo_db
-from app.core.response import ok
+from app.routers.auth_db import get_current_user # 认证模块
+from app.core.database import get_mongo_db # 数据库模块
+from app.core.response import ok # 响应模块
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(__name__) # 日志记录器
 
-router = APIRouter(prefix="/stocks", tags=["stocks"])
+router = APIRouter(prefix="/stocks", tags=["stocks"]) # 股票路由
 
 
-def _zfill_code(code: str) -> str:
+def _zfill_code(code: str) -> str: # 补齐6位数字工具函数
     try:
         s = str(code).strip()
         if len(s) == 6 and s.isdigit():
